@@ -47,7 +47,8 @@ app.post('/login', async (req: Request, res: Response) => {
 
 app.get('/salesforce-data/parent', async (req: Request, res: Response) => {
 	try {
-		await conn.login('gbatte@splayce.eu.catsplayce', 'h35p6NX@u');
+		console.info(process.env.SALESFORCE_USERNAME, process.env.SALESFORCE_PASSWORD)
+		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);//login with .env
 		const {lastRecordID,lastSync} = req.query
 		const recordsPerPage = 500;
 

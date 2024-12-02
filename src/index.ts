@@ -47,7 +47,6 @@ app.post('/login', async (req: Request, res: Response) => {
 
 app.get('/salesforce-data/parent', async (req: Request, res: Response) => {
 	try {
-		console.info(process.env.SALESFORCE_USERNAME, process.env.SALESFORCE_PASSWORD)
 		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);//login with .env
 		const {lastRecordID,lastSync} = req.query
 		const recordsPerPage = 500;
@@ -123,6 +122,30 @@ app.get('/salesforce-data/child', async (req: Request, res: Response) => {
 		res.status(500).json({ error: 'Erreur lors de la récupération des données Salesforce' });
 	}
 });
+
+//TODO/ LE PROBLEME C'EST LES CORS
+app.get('/download-image', async (req, res) => {
+    const imageUrl = 'https://gdcomgroup--catsplayce.sandbox.file.force.com/sfc/servlet.shepherd/version/download/068AW000007ufR3YAI';
+    await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+    try {
+        const response = await fetch(imageUrl);
+		console.log(response)
+        // console.log("🚀 ~ app.get ~ imageUrl:", imageUrl)
+
+        if (!response.ok) {
+            return res.status(500).send('Erreur de récupération de l\'image');
+        }
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+
+        res.setHeader('Content-Type', 'image/webp');
+        res.send(buffer);
+    } catch (error) {
+        console.error('Erreur côté serveur:', error);
+        res.status(500).send('Erreur interne du serveur');
+    }
+});
+
 
 app.listen(port, () => {
 	console.log(`Serveur en écoute sur le port ${port}`);

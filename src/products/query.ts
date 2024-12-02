@@ -3,6 +3,7 @@ export const RECORD_TYPE = {
 	CHILD: '01209000000mcl4AAA'
 } as const;
 
+//TODO // ADD Ecoscore details dans la requête
 export const DEFAULT_PRODUCT_QUERY =  `
 	SELECT
 		IsActive,
@@ -17,8 +18,14 @@ export const DEFAULT_PRODUCT_QUERY =  `
 		SubFamilyMktg2__c,
 		Reference__c,
 		SumEcoscore__c,
+		Ecoscore__c,
+		Ecoscore2__c,
+		Ecoscore3__c,
+		Ecoscore4__c,
+		Ecoscore5__c,
 		Name,
 		Stock_dispo__c,
+		Default_Price__c,
 		CreatedDate,
 		LastModifiedDate,
 		Material__c,
@@ -38,6 +45,13 @@ export const DEFAULT_PRODUCT_QUERY =  `
 	WHERE Entit_GD__c INCLUDES ('splayce') 
 	`;
 	// AND IsActive = true
+
+	// export const DEFAULT_PRODUCT_QUERY =  `
+ 	// SELECT
+ 	// *
+ 	// FROM Product2
+ 	// WHERE Entit_GD__c INCLUDES ('splayce') 
+ 	// `;
 
 export const PARENT_WHERE_CLAUSE = `
 	AND (NOT Etat_Silog__c LIKE '%Arrêté%')

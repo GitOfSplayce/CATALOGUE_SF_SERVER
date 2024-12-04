@@ -3,7 +3,6 @@ export const RECORD_TYPE = {
 	CHILD: '01209000000mcl4AAA'
 } as const;
 
-//TODO // ADD Ecoscore details dans la requête
 export const DEFAULT_PRODUCT_QUERY =  `
 	SELECT
 		IsActive,
@@ -40,7 +39,8 @@ export const DEFAULT_PRODUCT_QUERY =  `
 		Parent_ProductRef__c,
 		RecordTypeId,
 		Etat_Silog__c,
-		URL_image_famille_catalogue__c
+		URL_image_famille_catalogue__c,
+		URL_image__c
 	FROM Product2
 	WHERE Entit_GD__c INCLUDES ('splayce') 
 	`;

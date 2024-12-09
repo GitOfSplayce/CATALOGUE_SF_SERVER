@@ -40,7 +40,8 @@ export const DEFAULT_PRODUCT_QUERY =  `
 		RecordTypeId,
 		Etat_Silog__c,
 		URL_image_famille_catalogue__c,
-		URL_image__c
+		URL_image__c,
+		Famille_Catalogue__c
 	FROM Product2
 	WHERE Entit_GD__c INCLUDES ('splayce') 
 	`;
@@ -61,5 +62,15 @@ export const PARENT_WHERE_CLAUSE = `
 export const CHILD_WHERE_CLAUSE = `
 	AND IsActive = true
 	AND RecordTypeId = '${RECORD_TYPE.CHILD}'
+`
+
+//TODO/ Ajouter une clause WHERE IsDeleted (...)
+export const DEFAULT_CATEGORY_QUERY = `
+SELECT 
+	Id,
+	URL_image__c,
+	Name,
+	IsDeleted
+FROM Famille_Catalogue__c
 `
 

@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import jsforce from 'jsforce';
 import cors from 'cors';
-import {CHILD_WHERE_CLAUSE, DEFAULT_PRODUCT_QUERY, PARENT_WHERE_CLAUSE} from './products/query';
+import {CHILD_WHERE_CLAUSE, DEFAULT_PRODUCT_QUERY, PARENT_WHERE_CLAUSE, DEFAULT_CATEGORY_QUERY} from './products/query';
 
 const fs = require('fs');
 const path = require('path');
@@ -50,6 +50,20 @@ app.post('/login', async (req: Request, res: Response) => {
 	}
 });
 
+app.get('/salesforce-data/category', async (req: Request, res: Response) => {
+	try {
+		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+		let query = DEFAULT_CATEGORY_QUERY;
+		const result = await conn.query(query);
+		return res.json({
+			record: result.records
+		})
+	//Actuellement la requête est limitée à 500 résultats par SF sur la sandbox. 2000 en prod, si trop long rajouter un id incrémental dans la table
+	} catch (error) {
+		console.error('Erreur lors de la requête Salesforce:', error);
+		res.status(500).json({ error: 'Erreur lors de la récupération des données Salesforce' });
+	}
+})
 
 app.get('/salesforce-data/parent', async (req: Request, res: Response) => {
 	try {
@@ -130,78 +144,21 @@ app.get('/salesforce-data/child', async (req: Request, res: Response) => {
 	}
 });
 
-// app.post('/download-image', async (req, res) => {
-
-//     const imageUrl = req.body.URL_image__c;
-//     const reference = req.body.Reference__c;
-//     if (!imageUrl) {
-//         return res.status(404).json({ message: 'Pas d\'image pour ce produit' });
-//     }
-
-//     try {
-//         console.info("📝 BODY DU REQ", imageUrl, reference);
-
-//         // Si pas de token d'accès, on se connecte à Salesforce
-//         if (!conn.accessToken) {
-//             await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
-//         }
-
-//         // On fait la requête fetch pour récupérer l'image
-//         const response = await fetch(imageUrl, {
-//             headers: {
-//                 'Authorization': `Bearer ${conn.accessToken}`,
-//                 'Cookie': `sid=${conn.accessToken}`
-//             }
-//         });
-
-//         if (!response.ok) {
-//             throw new Error(`Erreur HTTP: ${response.status}`);
-//         }
-
-//         // Définition du chemin où on va sauvegarder l'image téléchargée
-//         const filePath = path.join(__dirname, '..', 'upload', `${reference}.webp`);
-//         const fileStream = fs.createWriteStream(filePath);
-
-//         // Téléchargement de l'image et sauvegarde sur disque
-//         const imageStream = Readable.from(response.body);
-//         await new Promise((resolve, reject) => {
-//             imageStream
-//                 .pipe(fileStream)
-//                 .on('finish', () => {
-//                     console.log('Image téléchargée avec succès:', filePath);
-
-//                     // Lecture du fichier pour le convertir en Base64
-//                     const base64Image =  fs.readFileSync(filePath, { encoding: 'base64' });
-
-//                     // Envoi de la réponse avec le chemin de l'image et sa version en Base64
-//                     return res.status(200).json({
-//                         message: 'Image téléchargée avec succès',
-//                         base64: `data:image/webp;base64,${base64Image}`
-//                     });
-                
-//                 })
-//                 .on('error', (error) => {
-//                     reject(error);
-//                 });
-//         });
-
-//     } catch (error) {
-//         console.error('Erreur lors de la récupération de l\'image:', error);
-//         res.status(500).send(error.message);
-//     }
-// });
-
 app.post('/download-image', async (req, res) => {
-
+	let reference = ""
     const imageUrl = req.body.URL_image__c;
-    const reference = req.body.Reference__c;
+	if (req.body.Reference__c) {
+		reference = req.body.Reference__c;
+	}
+	else if (req.body.Id) {
+		reference = req.body.Id
+	}
+  
     if (!imageUrl) {
         return res.status(404).json({ message: 'Pas d\'image pour ce produit' });
     }
 
     try {
-        console.info("📝 BODY DU REQ", imageUrl, reference);
-
         if (!conn.accessToken) {
             await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
         }

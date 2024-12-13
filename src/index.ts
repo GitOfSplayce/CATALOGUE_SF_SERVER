@@ -31,6 +31,9 @@ app.use(cors(corsOptions));
 const conn = new jsforce.Connection({
 	loginUrl: process.env.SALESFORCE_LOGIN_URL,
 });
+console.log("🚀 ~ conn:", conn)
+
+
 
 // Route de connexion à Salesforce
 app.post('/login', async (req: Request, res: Response) => {
@@ -66,6 +69,7 @@ app.get('/salesforce-data/category', async (req: Request, res: Response) => {
 })
 
 app.get('/salesforce-data/parent', async (req: Request, res: Response) => {
+
 	try {
 		console.log(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!)
 		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);//login with .env

@@ -39,9 +39,10 @@ export const DEFAULT_PRODUCT_QUERY =  `
 		Parent_ProductRef__c,
 		RecordTypeId,
 		Etat_Silog__c,
-		URL_image_famille_catalogue__c,
 		URL_image__c,
-		Famille_Catalogue__c
+		Famille_Catalogue__c,
+		Nb_pi_ces_par_colis__c,
+		Poids_brut__c
 	FROM Product2
 	WHERE Entit_GD__c INCLUDES ('splayce') 
 	`;

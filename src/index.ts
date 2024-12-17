@@ -37,24 +37,24 @@ console.log("🚀 ~ conn:", conn)
 
 
 // Route de connexion à Salesforce
-app.post('/login', async (req: Request, res: Response) => {
-	(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);//login with .env
-	// const { username, password } = req.body;
+// app.post('/login', async ( res: Response) => {
+// 	(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);//login with .env
+// 	// const { username, password } = req.body;
 
-	// if (!username || !password) {
-	// 	return res.status(400).json({ erreur: 'Nom d\'utilisateur et mot de passe requis' });
-	// }
+// 	// if (!username || !password) {
+// 	// 	return res.status(400).json({ erreur: 'Nom d\'utilisateur et mot de passe requis' });
+// 	// }
 
-	try {
-		await conn.login(username, password);
-		res.json({ message: 'Connexion réussie' });
-	} catch (erreur) {
-		console.error('Erreur de connexion à Salesforce:', erreur);
-		res.status(401).json({ erreur: 'Échec de l\'authentification' });
-	}
-});
+// 	try {
+// 		await conn.login(username, password);
+// 		res.json({ message: 'Connexion réussie' });
+// 	} catch (erreur) {
+// 		console.error('Erreur de connexion à Salesforce:', erreur);
+// 		res.status(401).json({ erreur: 'Échec de l\'authentification' });
+// 	}
+// });
 
-app.get('/salesforce-data/category', async (req: Request, res: Response) => {
+app.get('/salesforce-data/category', async (res: Response) => {
 	try {
 		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
 		let query = DEFAULT_CATEGORY_QUERY;
@@ -194,7 +194,7 @@ app.post('/download-image', async (req, res) => {
                     message: 'Image téléchargée avec succès',
                     base64: `data:image/webp;base64,${base64Image}`
                 });
-            } catch (error) {
+            } catch (error: any) {
                 console.error('Erreur lors de la lecture du fichier:', error);
                 return res.status(500).json({ message: 'Erreur lors de la conversion en Base64', error: error.message });
             }
@@ -205,7 +205,7 @@ app.post('/download-image', async (req, res) => {
             return res.status(500).json({ message: 'Erreur lors du téléchargement de l\'image', error: error.message });
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('Erreur générale:', error);
         return res.status(500).json({ message: 'Erreur lors du traitement de l\'image', error: error.message });
     }

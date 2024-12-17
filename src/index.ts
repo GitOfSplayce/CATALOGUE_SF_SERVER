@@ -29,8 +29,10 @@ app.use(cors(corsOptions));
 
 
 // Configuration de la connexion Salesforce
+//TODO/ REPASSER SUR DES VARIABLES D'ENVIRONNEMENT
 const conn = new jsforce.Connection({
-	loginUrl: process.env.SALESFORCE_LOGIN_URL,
+	// loginUrl: process.env.SALESFORCE_LOGIN_URL,
+	loginUrl: "https://login.salesforce.com",
 });
 console.log("🚀 ~ conn:", conn)
 
@@ -56,7 +58,9 @@ console.log("🚀 ~ conn:", conn)
 
 app.get('/salesforce-data/category', async (_req:Request, res: Response) => {
 	try {
-		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+		// await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+		await conn.login("cpineau@splayce.eu", "S24Tri@56");
+		
 		let query = DEFAULT_CATEGORY_QUERY;
 		const result = await conn.query(query);
 		return res.json({
@@ -73,7 +77,8 @@ app.get('/salesforce-data/parent', async (req: Request, res: Response) => {
 
 	try {
 		console.log(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!)
-		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);//login with .env
+		// await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);//login with .env
+		await conn.login("cpineau@splayce.eu", "S24Tri@56");
 		const {lastRecordID,lastSync} = req.query
 		const recordsPerPage = 500;
 
@@ -112,7 +117,8 @@ app.get('/salesforce-data/parent', async (req: Request, res: Response) => {
 
 app.get('/salesforce-data/child', async (req: Request, res: Response) => {
 	try {
-		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+		// await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+		await conn.login("cpineau@splayce.eu", "S24Tri@56");
 		const {lastRecordID,lastSync} = req.query
 		const recordsPerPage = 500;
 
@@ -165,7 +171,8 @@ app.post('/download-image', async (req, res) => {
 
     try {
         if (!conn.accessToken) {
-            await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+            // await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
+			await conn.login("cpineau@splayce.eu", "S24Tri@56");
         }
 
         const response = await fetch(imageUrl, {

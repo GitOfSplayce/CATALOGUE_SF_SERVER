@@ -54,7 +54,7 @@ console.log("🚀 ~ conn:", conn)
 // 	}
 // });
 
-app.get('/salesforce-data/category', async (res: Response) => {
+app.get('/salesforce-data/category', async (_req:Request, res: Response) => {
 	try {
 		await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);
 		let query = DEFAULT_CATEGORY_QUERY;

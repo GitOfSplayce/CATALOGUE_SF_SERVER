@@ -168,7 +168,7 @@ app.post('/download-image', async (req, res) => {
     if (!imageUrl) {
         return res.status(404).json({ message: 'Pas d\'image pour ce produit' });
     }
-
+//TODO/ PASSER PAR DU REQ DES INFOS COMMERCIAUX
     try {
         if (!conn.accessToken) {
             // await conn.login(process.env.SALESFORCE_USERNAME!, process.env.SALESFORCE_PASSWORD!);

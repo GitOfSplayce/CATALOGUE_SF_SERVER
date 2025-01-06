@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Configuration de CORS
 const corsOptions = {
-	origin: /^http:\/\/localhost(:\d+)?$/, // Autorise tous les ports pour localhost/
+	origin: /^(http|https):\/\/localhost(:\d+)?$/, // Autorise tous les ports pour localhost/
 	// origin: "http://192.168.1.122:5173/", // Autorise tous les ports pour localhost
 	// origin: "http://192.168.1.109:5173/",
 	optionsSuccessStatus: 200
